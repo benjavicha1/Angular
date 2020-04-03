@@ -1,0 +1,11 @@
+.mat-background {
+  background-color: #fafafa;
+  width: 60%;
+  margin: auto;
+}
+.stepper-container {
+  width: 90%;
+  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
