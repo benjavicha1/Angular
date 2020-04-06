@@ -3,9 +3,19 @@
     <mat-vertical-stepper linear #surveyStepper>
       <!-- Step 1 -->
       <mat-step [stepControl]="formGroup1">
+        <!-- Form Group -->
         <form [formGroup]="formGroup1">
+          <!-- Step Label -->
           <ng-template matStepLabel>
-            <b>Survey Type:</b> {{ selectedSurveyTypeName }}
+            <b>Survey Type:</b>
+            <mat-chip-list *ngIf="selectedSurveyType_Name">
+              <mat-chip (click)="surveyStepper.selectedIndex = 0" matChipRemove>
+                {{ selectedSurveyType_Name }}
+                <mat-icon matChipRemove (click)="onCancelClickSurveyTypeChip()">
+                  cancel
+                </mat-icon>
+              </mat-chip>
+            </mat-chip-list>
           </ng-template>
           <mat-form-field appearance="outline">
             <mat-label>Select a type</mat-label>
@@ -27,12 +37,22 @@
               Please choose a type of survey
             </mat-error>
           </mat-form-field>
-          <p *ngIf="selectedSurveyTypeDescription">
-            <b>*Note:</b> {{ selectedSurveyTypeDescription }}
-          </p>
-          <div *ngIf="selectedSurveyTypeName">
+          <mat-card
+            class="survey-type-card"
+            *ngIf="selectedSurveyType_DescriptionList"
+          >
+            <mat-list>
+              <li
+                mat-list-item
+                *ngFor="let description of selectedSurveyType_DescriptionList"
+              >
+                {{ description }}
+              </li>
+            </mat-list>
+          </mat-card>
+          <div *ngIf="selectedSurveyType_Name">
             <br />
-            <button mat-button matStepperNext>Next</button>
+            <button mat-raised-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
@@ -41,10 +61,11 @@
       <mat-step
         [stepControl]="formGroup2"
         [optional]="true"
-        *ngIf="selectedSurveyTypeIsHidden == false"
+        *ngIf="allowedConfigTypeList.includes(selectedSurveyType_Id)"
       >
         <form [formGroup]="formGroup2">
-          <ng-template matStepLabel>Configuration Options</ng-template>
+          <!-- Step Label -->
+          <ng-template matStepLabel><b>Configuration</b></ng-template>
           <mat-form-field appearance="outline">
             <mat-label>Configuration(s)</mat-label>
             <mat-select [formControl]="Configurations" multiple>
@@ -67,12 +88,14 @@
           </mat-form-field>
           <p>
             <b>*Note:</b> By default, participants will have access to surveys
-            entire project length period on the next day of enrollment day.
+            on the next day of enrollment day and for entire project length
+            period.
           </p>
           <div>
             <br />
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-raised-button matStepperPrevious>Back</button>
+            &nbsp;
+            <button mat-raised-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
@@ -82,9 +105,11 @@
         <ng-template matStepLabel>Done</ng-template>
         <p>You are now done.</p>
         <div>
-          <button mat-button matStepperPrevious>Back</button>
+          <button mat-raised-button matStepperPrevious>Back</button>
+          &nbsp;
           <button
-            mat-button
+            mat-raised-button
+            color="warn"
             (click)="changeClientSurveyType(null); surveyStepper.reset()"
           >
             Reset

@@ -1,11 +1,20 @@
 .mat-background {
   background-color: #fafafa;
-  width: 60%;
+  max-width: 60%;
   margin: auto;
 }
 .stepper-container {
-  width: 90%;
+  max-width: 90%;
   margin: auto;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+::ng-deep .mat-card-header-text {
+  margin-left: 0px !important;
+}
+
+::ng-deep .mat-chip-list-wrapper {
+  display: inline-block !important;
+  margin: 4px !important;
 }
