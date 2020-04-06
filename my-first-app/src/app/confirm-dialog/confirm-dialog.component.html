@@ -1,0 +1,14 @@
+<div mat-dialog-content>
+  <p>
+    <mat-icon>warning </mat-icon> Are you sure to reset all the configuration?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button cdkFocusInitial (click)="onCancelClick()">
+    Cancel
+  </button>
+  <button mat-button color="warn" (click)="onResetClick()">
+    Reset
+  </button>
+</div>
