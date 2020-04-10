@@ -12,8 +12,12 @@
     margin-top: 20px;
   }
 
+  .survey-type-container .mat-chip-list-wrapper mat-chip {
+    font-size: 18px !important;
+  }
+
   .configuration-container .mat-chip-list-wrapper mat-chip {
-    font-size: 12px !important;
+    font-size: 11px !important;
   }
 
   .configuration-container .mat-form-field {
@@ -61,21 +65,27 @@
   padding-bottom: 16px;
 }
 
-.survey-type-container .mat-expansion-panel-body {
-  /* padding-top: 16px; */
-}
-
 .survey-type-container .mat-expansion-panel-body li {
   margin: 10px 0;
 }
 
-.survey-type-container .button {
-  /* float: right; */
-}
-
+/* ---------------- Configuration step starts here ---------------- */
 .configuration-container .mat-form-field {
   width: 100%;
-  max-width: 300px;
+  max-width: 450px;
+}
+
+.configuration-panel.mat-select-panel {
+  min-width: 60% !important;
+}
+
+.configuration-container .mat-expansion-panel-header {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.configuration-container .mat-expansion-panel-body li {
+  margin: 10px 0;
 }
 
 /* .mat-background {
@@ -96,4 +106,12 @@
 
 /* ::ng-deep .mat-chip-list-wrapper {
   margin-left: 4px !important;
+} */
+
+/* .survey-type-container .button {
+  float: right;
+} */
+
+/* .survey-type-container .mat-expansion-panel-body {
+  padding-top: 16px;
 } */

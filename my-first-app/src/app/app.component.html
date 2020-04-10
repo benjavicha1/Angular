@@ -1,5 +1,9 @@
 <mat-card class="survey-builder-flow-card">
-  <mat-vertical-stepper [linear]="true" #surveyStepper (click)="triggerClick()">
+  <mat-vertical-stepper
+    [linear]="true"
+    #surveyStepper
+    (click)="onClickStepper()"
+  >
     <!-- Step 1 -->
     <mat-step [stepControl]="formGroup1" #step1 [completed]>
       <!-- Form Group 1 -->
@@ -58,16 +62,6 @@
             Please choose a type of survey
           </mat-error>
         </mat-form-field>
-        <!-- <mat-card class="survey-type-card" *ngIf="mySurvey.type.descriptions">
-          <mat-list>
-            <li
-              mat-list-item
-              *ngFor="let description of mySurvey.type.descriptions"
-            >
-              {{ description }}
-            </li>
-          </mat-list>
-        </mat-card> -->
         <mat-expansion-panel
           [expanded]="true"
           *ngIf="mySurvey.type.descriptions"
@@ -114,7 +108,11 @@
         </ng-template>
         <mat-form-field appearance="outline">
           <mat-label>Select configuration(s)</mat-label>
-          <mat-select [formControl]="configurationControl" multiple>
+          <mat-select
+            [formControl]="configurationControl"
+            panelClass="configuration-panel"
+            multiple
+          >
             <mat-select-trigger>
               <mat-chip-list>
                 <mat-chip
@@ -130,6 +128,7 @@
             <mat-option
               *ngFor="let configuration of configurations"
               [value]="configuration"
+              (onSelectionChange)="onSelectionChangeConfiguration($event)"
             >
               {{ configuration.name }}
             </mat-option>
@@ -147,20 +146,25 @@
           multi="true"
           *ngIf="configurationControl.value.length > 0"
         >
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
+          <mat-expansion-panel
+            [expanded]="indexExpanded == config.id"
+            *ngFor="let config of configurationControl.value"
+          >
+            <mat-expansion-panel-header
+              [collapsedHeight]="'auto'"
+              [expandedHeight]="'auto'"
+            >
               <mat-panel-title>
-                This is the expansion title
+                <b>{{ config.name }}</b>
               </mat-panel-title>
-              <!-- <mat-panel-description>
-                <p>
-                  Info
-                </p>
-              </mat-panel-description> -->
+              <mat-panel-description>
+                Description
+              </mat-panel-description>
             </mat-expansion-panel-header>
-
             <ng-template matExpansionPanelContent>
-              This the expansion 1 content
+              <li *ngFor="let description of config.descriptions">
+                {{ description }}
+              </li>
             </ng-template>
           </mat-expansion-panel>
         </mat-accordion>

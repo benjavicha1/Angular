@@ -92,7 +92,7 @@ export class AppComponent {
       },
       {
         id: 3,
-        name: 'Restrictions',
+        name: 'Restrictions (Availability)',
         descriptions: [
           'This is Restrictions Line 1 (Survey Availability)',
           'This is Restrictions Line 2',
@@ -186,7 +186,7 @@ export class AppComponent {
       if (result) {
         this.surveyTypeControl.reset();
         this.configurationControl.reset();
-        
+        this.configurationControl.patchValue([]);
         this.resetSurvey();
         this.surveyStepper.reset();
       }
@@ -207,12 +207,29 @@ export class AppComponent {
     }
   }
 
-  triggerClick() {
+  onClickStepper() {
     if (this.surveyStepper.selectedIndex == 1 && this.prevIndex == 0) {
       if (this.surveyTypeTooltip) {
         this.surveyTypeTooltip.show(600);
       }
     }
     this.prevIndex = this.surveyStepper.selectedIndex;
+  }
+
+  indexExpanded: number = -1;
+  panelOpenState: boolean = false;
+
+  onSelectionChangeConfiguration(event) {
+    // console.log(event.source.value, event.source.selected);
+    let index: number;
+
+    if (event.isUserInput) {
+      if (event.source.selected) {
+        index = event.source.value.id;
+      }
+      this.indexExpanded = index;
+    }
+    // console.log('config id (end)= ' + index);
+    // console.log('indexExpanded (end)= ' + this.indexExpanded);
   }
 }
