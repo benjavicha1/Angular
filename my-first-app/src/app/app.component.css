@@ -1,4 +1,84 @@
-.mat-background {
+.survey-builder-flow-card {
+  max-width: 70%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+/* iPhone X */
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .survey-builder-flow-card {
+    max-width: 80%;
+    margin: auto;
+    margin-top: 20px;
+  }
+
+  .configuration-container .mat-chip-list-wrapper mat-chip {
+    font-size: 12px !important;
+  }
+
+  .configuration-container .mat-form-field {
+    width: 100% !important;
+  }
+}
+
+/* iPad */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .survey-builder-flow-card {
+    max-width: 80%;
+    margin: auto;
+    margin-top: 30px;
+  }
+}
+
+/* iPad Pro */
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  .survey-builder-flow-card {
+    max-width: 80%;
+    margin: auto;
+    margin-top: 30px;
+  }
+}
+
+.survey-type-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.survey-type-label-wrapper b {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 16px;
+}
+
+.tooltip-red {
+  /* background: #b71c1c; */
+  background: #f44336;
+}
+
+.survey-type-container .mat-expansion-panel-header {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.survey-type-container .mat-expansion-panel-body {
+  /* padding-top: 16px; */
+}
+
+.survey-type-container .mat-expansion-panel-body li {
+  margin: 10px 0;
+}
+
+.survey-type-container .button {
+  /* float: right; */
+}
+
+.configuration-container .mat-form-field {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* .mat-background {
   background-color: #fafafa;
   max-width: 60%;
   margin: auto;
@@ -8,13 +88,12 @@
   margin: auto;
   padding-top: 20px;
   padding-bottom: 20px;
-}
+} */
 
-::ng-deep .mat-card-header-text {
+/* ::ng-deep .mat-card-header-text {
   margin-left: 0px !important;
-}
+} */
 
-::ng-deep .mat-chip-list-wrapper {
-  display: inline-block !important;
-  margin: 4px !important;
-}
+/* ::ng-deep .mat-chip-list-wrapper {
+  margin-left: 4px !important;
+} */

@@ -1,121 +1,199 @@
-<div class="mat-background">
-  <div class="stepper-container">
-    <mat-vertical-stepper linear #surveyStepper>
-      <!-- Step 1 -->
-      <mat-step [stepControl]="formGroup1">
-        <!-- Form Group -->
-        <form [formGroup]="formGroup1">
-          <!-- Step Label -->
-          <ng-template matStepLabel>
-            <b>Survey Type:</b>
-            <mat-chip-list *ngIf="selectedSurveyType_Name">
-              <mat-chip (click)="surveyStepper.selectedIndex = 0" matChipRemove>
-                {{ selectedSurveyType_Name }}
-                <mat-icon matChipRemove (click)="onCancelClickSurveyTypeChip()">
+<mat-card class="survey-builder-flow-card">
+  <mat-vertical-stepper [linear]="true" #surveyStepper (click)="triggerClick()">
+    <!-- Step 1 -->
+    <mat-step [stepControl]="formGroup1" #step1 [completed]>
+      <!-- Form Group 1 -->
+      <form
+        class="survey-type-container"
+        [formGroup]="formGroup1"
+        #surveyTypeForm
+      >
+        <!-- Step Label -->
+        <ng-template matStepLabel>
+          <div class="survey-type-label-wrapper">
+            <b> Survey Type:</b>
+
+            <mat-chip-list *ngIf="mySurvey.type.name">
+              <mat-chip
+                color="primary"
+                selected
+                (click)="surveyStepper.selectedIndex = 0"
+                #surveyTypeChip
+              >
+                {{ mySurvey.type.name }}
+                <!-- Remove Icon b/c it's not in mat-form-field -->
+                <mat-icon
+                  matChipRemove
+                  #surveyTypeTooltip="matTooltip"
+                  matTooltip="Remove to start over"
+                  matTooltipPosition="after"
+                  matTooltipClass="tooltip-red"
+                  matTooltipHideDelay="500"
+                  aria-label="Remove survey type to reset all configuration"
+                  (click)="onResetClicked()"
+                >
                   cancel
                 </mat-icon>
               </mat-chip>
             </mat-chip-list>
-          </ng-template>
-          <mat-form-field appearance="outline">
-            <mat-label>Select a type</mat-label>
-            <mat-select
-              formControlName="surveyTypeControl"
-              required
-              [(ngModel)]="selectedSurveyType"
-              (selectionChange)="changeClientSurveyType($event.value)"
-            >
-              <mat-option selected>None</mat-option>
-              <mat-option
-                *ngFor="let type of surveyTypes; let i = index"
-                [value]="i"
-              >
-                {{ type.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="surveyTypeControl.hasError('required')">
-              Please choose a type of survey
-            </mat-error>
-          </mat-form-field>
-          <mat-card
-            class="survey-type-card"
-            *ngIf="selectedSurveyType_DescriptionList"
+          </div>
+        </ng-template>
+        <!-- Form field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Select a type</mat-label>
+          <mat-select
+            formControlName="surveyTypeControl"
+            required
+            (selectionChange)="onSelectChangeSurveyType($event.value)"
           >
-            <mat-list>
-              <li
-                mat-list-item
-                *ngFor="let description of selectedSurveyType_DescriptionList"
-              >
+            <mat-option selected>None</mat-option>
+            <mat-option
+              *ngFor="let type of surveyTypes; let i = index"
+              [value]="i"
+            >
+              {{ type.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="surveyTypeControl.hasError('required')">
+            Please choose a type of survey
+          </mat-error>
+        </mat-form-field>
+        <!-- <mat-card class="survey-type-card" *ngIf="mySurvey.type.descriptions">
+          <mat-list>
+            <li
+              mat-list-item
+              *ngFor="let description of mySurvey.type.descriptions"
+            >
+              {{ description }}
+            </li>
+          </mat-list>
+        </mat-card> -->
+        <mat-expansion-panel
+          [expanded]="true"
+          *ngIf="mySurvey.type.descriptions"
+        >
+          <mat-expansion-panel-header
+            [collapsedHeight]="'auto'"
+            [expandedHeight]="'auto'"
+          >
+            <mat-panel-title>
+              <b>{{ mySurvey.type.name }}</b>
+            </mat-panel-title>
+            <mat-panel-description>
+              Description
+            </mat-panel-description>
+            <ng-template matExpansionPanelContent>
+              <li *ngFor="let description of mySurvey.type.descriptions">
                 {{ description }}
               </li>
-            </mat-list>
-          </mat-card>
-          <div *ngIf="selectedSurveyType_Name">
-            <br />
-            <button mat-raised-button matStepperNext>Next</button>
-          </div>
-        </form>
-      </mat-step>
-
-      <!-- Step 2 -->
-      <mat-step
-        [stepControl]="formGroup2"
-        [optional]="true"
-        *ngIf="allowedConfigTypeList.includes(selectedSurveyType_Id)"
-      >
-        <form [formGroup]="formGroup2">
-          <!-- Step Label -->
-          <ng-template matStepLabel><b>Configuration</b></ng-template>
-          <mat-form-field appearance="outline">
-            <mat-label>Configuration(s)</mat-label>
-            <mat-select [formControl]="Configurations" multiple>
-              <mat-select-trigger>
-                {{ Configurations.value ? Configurations.value[0] : "" }}
-                <span
-                  *ngIf="Configurations.value?.length > 1"
-                  class="example-additional-selection"
-                >
-                  (+{{ Configurations.value.length - 1 }}
-                  {{ Configurations.value?.length === 2 ? "other" : "others" }})
-                </span>
-              </mat-select-trigger>
-              <mat-option
-                *ngFor="let configuration of configurationList"
-                [value]="configuration"
-                >{{ configuration }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <p>
-            <b>*Note:</b> By default, participants will have access to surveys
-            on the next day of enrollment day and for entire project length
-            period.
-          </p>
-          <div>
-            <br />
-            <button mat-raised-button matStepperPrevious>Back</button>
-            &nbsp;
-            <button mat-raised-button matStepperNext>Next</button>
-          </div>
-        </form>
-      </mat-step>
-
-      <!-- Step 3: Done -->
-      <mat-step *ngIf="showDone">
-        <ng-template matStepLabel>Done</ng-template>
-        <p>You are now done.</p>
-        <div>
-          <button mat-raised-button matStepperPrevious>Back</button>
-          &nbsp;
-          <button
-            mat-raised-button
-            color="warn"
-            (click)="changeClientSurveyType(null); surveyStepper.reset()"
-          >
-            Reset
+            </ng-template>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+        <div class="button" *ngIf="mySurvey.type.id">
+          <br />
+          <button mat-raised-button color="primary" matStepperNext>
+            Next
           </button>
         </div>
-      </mat-step>
-    </mat-vertical-stepper>
-  </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 2 -->
+    <mat-step
+      [stepControl]="formGroup2"
+      [optional]="true"
+      #step2
+      [completed]
+      *ngIf="mySurvey.type.allowedConfigurationIdList"
+    >
+      <!-- Form Group 2 -->
+      <form class="configuration-container" [formGroup]="formGroup2">
+        <!-- Step Label -->
+        <ng-template matStepLabel>
+          <b>Configuration</b>
+        </ng-template>
+        <mat-form-field appearance="outline">
+          <mat-label>Select configuration(s)</mat-label>
+          <mat-select [formControl]="configurationControl" multiple>
+            <mat-select-trigger>
+              <mat-chip-list>
+                <mat-chip
+                  *ngFor="let config of configurationControl.value"
+                  [removable]="true"
+                  (removed)="onConfigRemoved(config)"
+                >
+                  {{ config.name }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-select-trigger>
+            <mat-option
+              *ngFor="let configuration of configurations"
+              [value]="configuration"
+            >
+              {{ configuration.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-card>
+          <p>
+            <b>*Note:</b> By default, participants can access to a survey every
+            day after the enrollment day and for entire project length period.
+          </p>
+        </mat-card>
+        <br />
+
+        <mat-accordion
+          multi="true"
+          *ngIf="configurationControl.value.length > 0"
+        >
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                This is the expansion title
+              </mat-panel-title>
+              <!-- <mat-panel-description>
+                <p>
+                  Info
+                </p>
+              </mat-panel-description> -->
+            </mat-expansion-panel-header>
+
+            <ng-template matExpansionPanelContent>
+              This the expansion 1 content
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <div>
+          <br />
+          <button mat-raised-button matStepperPrevious>Back</button>
+          &nbsp;
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 3: Done -->
+    <mat-step *ngIf="mySurvey.isComplete">
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        &nbsp;
+        <button mat-raised-button color="warn" (click)="onResetClicked()">
+          Reset
+        </button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+</mat-card>
+
+<br />
+<div>
+  {{ mySurvey | json }}
 </div>
+<div>
+  {{ configurationControl.value | json }}
+</div>
+<div>step 1 is complete? {{ !!step1.completed }}</div>
