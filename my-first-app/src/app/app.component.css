@@ -4,6 +4,59 @@
   margin-top: 20px;
 }
 
+/* Bold the step header label  */
+.mat-step-label-selected {
+  font-weight: bold !important;
+}
+
+/* ---------------- Survey Type step starts here ---------------- */
+.survey-type-label-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.survey-type-label-wrapper span {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 12px;
+}
+
+/* Reset chip tooltip background color */
+.tooltip-red {
+  /* background: #b71c1c; */
+  background: #f44336;
+}
+
+.survey-type-container .mat-expansion-panel-header {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.survey-type-container .mat-expansion-panel-body li {
+  margin: 10px 0;
+}
+
+/* ---------------- Configuration step starts here ---------------- */
+/* Multiple Selection form */
+.configuration-container .mat-form-field {
+  width: 100%;
+  max-width: 450px;
+}
+
+/* .configuration-panel {
+  min-width: 60% !important;
+} */
+
+.configuration-container .mat-expansion-panel-header {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.configuration-container .mat-expansion-panel-body li {
+  margin: 10px 0;
+}
+
 /* iPhone X */
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-device-pixel-ratio: 3) {
   .survey-builder-flow-card {
@@ -43,51 +96,6 @@
   }
 }
 
-.survey-type-label-wrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.survey-type-label-wrapper b {
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 16px;
-}
-
-.tooltip-red {
-  /* background: #b71c1c; */
-  background: #f44336;
-}
-
-.survey-type-container .mat-expansion-panel-header {
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-
-.survey-type-container .mat-expansion-panel-body li {
-  margin: 10px 0;
-}
-
-/* ---------------- Configuration step starts here ---------------- */
-.configuration-container .mat-form-field {
-  width: 100%;
-  max-width: 450px;
-}
-
-.configuration-panel.mat-select-panel {
-  min-width: 60% !important;
-}
-
-.configuration-container .mat-expansion-panel-header {
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-
-.configuration-container .mat-expansion-panel-body li {
-  margin: 10px 0;
-}
-
 /* .mat-background {
   background-color: #fafafa;
   max-width: 60%;
@@ -114,4 +122,9 @@
 
 /* .survey-type-container .mat-expansion-panel-body {
   padding-top: 16px;
+} */
+
+/* To create background on mat-step-header  */
+/* .mat-step-header[aria-selected="true"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 } */

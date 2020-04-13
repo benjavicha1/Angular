@@ -5,7 +5,7 @@
     (click)="onClickStepper()"
   >
     <!-- Step 1 -->
-    <mat-step [stepControl]="formGroup1" #step1 [completed]>
+    <mat-step [stepControl]="formGroup1" #step1>
       <!-- Form Group 1 -->
       <form
         class="survey-type-container"
@@ -15,8 +15,7 @@
         <!-- Step Label -->
         <ng-template matStepLabel>
           <div class="survey-type-label-wrapper">
-            <b> Survey Type:</b>
-
+            <span>Survey Type:</span>
             <mat-chip-list *ngIf="mySurvey.type.name">
               <mat-chip
                 color="primary"
@@ -95,16 +94,15 @@
     <!-- Step 2 -->
     <mat-step
       [stepControl]="formGroup2"
-      [optional]="true"
+      [optional]="false"
       #step2
-      [completed]
       *ngIf="mySurvey.type.allowedConfigurationIdList"
     >
       <!-- Form Group 2 -->
       <form class="configuration-container" [formGroup]="formGroup2">
         <!-- Step Label -->
         <ng-template matStepLabel>
-          <b>Configuration</b>
+          Configuration
         </ng-template>
         <mat-form-field appearance="outline">
           <mat-label>Select configuration(s)</mat-label>
@@ -178,11 +176,121 @@
       </form>
     </mat-step>
 
-    <!-- Step 3: Done -->
+    <!-- Step 3 -->
+    <mat-step
+      [stepControl]="formGroup3"
+      [optional]="true"
+      #step3
+      *ngIf="isScheduledNotificationSelected"
+    >
+      <!-- Form Group 3 -->
+      <form class="scheduled-notification-container" [formGroup]="formGroup3">
+        <!-- Step Label -->
+        <ng-template matStepLabel>
+          Scheduled Notification
+        </ng-template>
+        <mat-form-field>
+          <mat-label>Question</mat-label>
+          <input matInput formControlName="ScheduledControl" />
+        </mat-form-field>
+        <div>
+          <br />
+          <button mat-raised-button matStepperPrevious>Back</button>
+          &nbsp;
+          <button mat-raised-button>Reset</button>
+          &nbsp;
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 4 -->
+    <mat-step
+      [stepControl]="formGroup4"
+      [optional]="true"
+      #step4
+      *ngIf="isRandomNotificationSelected"
+    >
+      <!-- Form Group 4 -->
+      <form class="random-notification-container" [formGroup]="formGroup4">
+        <!-- Step Label -->
+        <ng-template matStepLabel>
+          Random Notification
+        </ng-template>
+        <mat-form-field>
+          <mat-label>Question</mat-label>
+          <input matInput formControlName="RandomControl" />
+        </mat-form-field>
+        <div>
+          <br />
+          <button mat-raised-button matStepperPrevious>Back</button>
+          &nbsp;
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 5 -->
+    <mat-step
+      [stepControl]="formGroup5"
+      [optional]="true"
+      #step5
+      *ngIf="isRestrictionsSelected"
+    >
+      <!-- Form Group 5 -->
+      <form class="Restrictions-container" [formGroup]="formGroup5">
+        <!-- Step Label -->
+        <ng-template matStepLabel>
+          Restrictions (Availability)
+        </ng-template>
+        <mat-form-field>
+          <mat-label>Question</mat-label>
+          <input matInput formControlName="RestrictionsControl" />
+        </mat-form-field>
+        <div>
+          <br />
+          <button mat-raised-button matStepperPrevious>Back</button>
+          &nbsp;
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 6 -->
+    <mat-step
+      [stepControl]="formGroup6"
+      [optional]="true"
+      #step6
+      *ngIf="isFollowUpSelected"
+    >
+      <!-- Form Group 6 -->
+      <form class="follow-up-container" [formGroup]="formGroup6">
+        <!-- Step Label -->
+        <ng-template matStepLabel>
+          Follow-up
+        </ng-template>
+        <mat-form-field>
+          <mat-label>Question</mat-label>
+          <input matInput formControlName="FollowUpControl" />
+        </mat-form-field>
+        <div>
+          <br />
+          <button mat-raised-button matStepperPrevious>Back</button>
+          &nbsp;
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step Done -->
     <mat-step *ngIf="mySurvey.isComplete">
       <ng-template matStepLabel>Done</ng-template>
       <p>You are now done.</p>
       <div>
+        <button mat-raised-button (click)="surveyStepper.selectedIndex = 0">
+          Test: Go to step 1
+        </button>
+        &nbsp;
         <button mat-raised-button matStepperPrevious>Back</button>
         &nbsp;
         <button mat-raised-button color="warn" (click)="onResetClicked()">
@@ -193,11 +301,10 @@
   </mat-vertical-stepper>
 </mat-card>
 
-<br />
+<!-- <br />
 <div>
   {{ mySurvey | json }}
 </div>
 <div>
   {{ configurationControl.value | json }}
-</div>
-<div>step 1 is complete? {{ !!step1.completed }}</div>
+</div> -->

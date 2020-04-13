@@ -50,14 +50,24 @@ export class AppComponent {
   @ViewChild('surveyTypeTooltip') surveyTypeTooltip: MatTooltip;
   // @ViewChild('surveyTypeChip') surveyTypeChip: MatChip;
 
-  prevIndex: number = 0;
-
   mySurvey = <Survey>{};
   surveyTypes: SurveyType[];
   configurations: Configuration[];
 
+  prevStepIndex: number = 0;
+  showTypeChangeDialog: boolean = false;
+  indexExpanded: number = -1;
+  isScheduledNotificationSelected: boolean;
+  isRandomNotificationSelected: boolean;
+  isRestrictionsSelected: boolean;
+  isFollowUpSelected: boolean;
+
   formGroup1: FormGroup;
   formGroup2: FormGroup;
+  formGroup3: FormGroup;
+  formGroup4: FormGroup;
+  formGroup5: FormGroup;
+  formGroup6: FormGroup;
   surveyTypeControl = new FormControl('', Validators.required);
   configurationControl = new FormControl([]);
 
@@ -140,10 +150,23 @@ export class AppComponent {
     this.formGroup2 = this._formBuilder.group({
       configurationControl: '',
     });
+    this.formGroup3 = this._formBuilder.group({
+      ScheduledControl: '',
+    });
+    this.formGroup4 = this._formBuilder.group({
+      RandomControl: '',
+    });
+    this.formGroup5 = this._formBuilder.group({
+      RestrictionsControl: '',
+    });
+    this.formGroup6 = this._formBuilder.group({
+      FollowUpControl: '',
+    });
   }
 
   onSelectChangeSurveyType(index): void {
-    console.log('type index: ' + index);
+    console.log('showTypeChangeDialog: ' + this.showTypeChangeDialog);
+
     if (index == null) {
       console.log('None clicked');
       this.mySurvey.type.id = null;
@@ -154,6 +177,10 @@ export class AppComponent {
       this.mySurvey.isComplete = null;
       console.log(this.mySurvey);
     } else {
+      if (this.showTypeChangeDialog) {
+        this.resetSurvey();
+        this.showTypeChangeDialog = false; // reset showTypeChangeDialog to => false
+      }
       this.mySurvey.type.id = this.surveyTypes[index].id;
       this.mySurvey.type.name = this.surveyTypes[index].name;
       this.mySurvey.type.descriptions = this.surveyTypes[index].descriptions;
@@ -166,16 +193,6 @@ export class AppComponent {
     }
   }
 
-  resetSurvey(): void {
-    console.log('Reset survey clicked');
-    this.mySurvey.type.id = null;
-    this.mySurvey.type.name = null;
-    this.mySurvey.type.descriptions = null;
-    this.mySurvey.type.isHidden = null;
-    this.mySurvey.type.allowedConfigurationIdList = null;
-    this.mySurvey.isComplete = null;
-  }
-
   onResetClicked(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '280px',
@@ -184,13 +201,30 @@ export class AppComponent {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       if (result) {
-        this.surveyTypeControl.reset();
-        this.configurationControl.reset();
-        this.configurationControl.patchValue([]);
         this.resetSurvey();
         this.surveyStepper.reset();
       }
     });
+  }
+
+  resetSurvey(): void {
+    console.log('Reset survey');
+
+    this.surveyTypeControl.reset();
+    this.configurationControl.reset();
+    this.configurationControl.patchValue([]);
+
+    this.mySurvey.type.id = null;
+    this.mySurvey.type.name = null;
+    this.mySurvey.type.descriptions = null;
+    this.mySurvey.type.isHidden = null;
+    this.mySurvey.type.allowedConfigurationIdList = null;
+    this.mySurvey.isComplete = null;
+
+    this.isScheduledNotificationSelected = false;
+    this.isRandomNotificationSelected = false;
+    this.isRestrictionsSelected = false;
+    this.isFollowUpSelected = false;
   }
 
   onConfigRemoved(config: Configuration) {
@@ -208,19 +242,30 @@ export class AppComponent {
   }
 
   onClickStepper() {
-    if (this.surveyStepper.selectedIndex == 1 && this.prevIndex == 0) {
+    // Show reset tooltip in the chip
+    if (this.surveyStepper.selectedIndex == 1 && this.prevStepIndex == 0) {
       if (this.surveyTypeTooltip) {
         this.surveyTypeTooltip.show(600);
       }
     }
-    this.prevIndex = this.surveyStepper.selectedIndex;
+
+    // Show survey type change dialog
+    if (this.showTypeChangeDialog == false && this.prevStepIndex == 0) {
+      this.showTypeChangeDialog = false;
+    }
+    if (this.prevStepIndex != 0) {
+      this.showTypeChangeDialog = true;
+    }
+
+    // Set the previous step index to current before returning
+    this.prevStepIndex = this.surveyStepper.selectedIndex;
+
+    console.log('showTypeChangeDialog: ' + this.showTypeChangeDialog);
+    console.log('prevStepIndex: ' + this.prevStepIndex);
   }
 
-  indexExpanded: number = -1;
-  panelOpenState: boolean = false;
-
   onSelectionChangeConfiguration(event) {
-    // console.log(event.source.value, event.source.selected);
+    console.log(event.isUserInput, event.source.value, event.source.selected);
     let index: number;
 
     if (event.isUserInput) {
@@ -231,5 +276,25 @@ export class AppComponent {
     }
     // console.log('config id (end)= ' + index);
     // console.log('indexExpanded (end)= ' + this.indexExpanded);
+
+    /* Show/hide configuration steps */
+    let isSelected: boolean = event.source.selected;
+
+    switch (event.source.value.id) {
+      case 1:
+        this.isScheduledNotificationSelected = isSelected;
+        break;
+      case 2:
+        this.isRandomNotificationSelected = isSelected;
+        break;
+      case 3:
+        this.isRestrictionsSelected = isSelected;
+        break;
+      case 4:
+        this.isFollowUpSelected = isSelected;
+        break;
+      default:
+        break;
+    }
   }
 }
